@@ -23,6 +23,11 @@ login_manager.login_view = 'login'
 # This is for Vercel
 app.debug = False
 
+# Context processor to make categories available to all templates
+@app.context_processor
+def inject_categories():
+    return dict(categories=Category.query.all())
+
 # Models
 class Category(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -98,8 +103,7 @@ def index():
         query = query.order_by(Product.name.asc())
     
     products = query.paginate(page=page, per_page=9, error_out=False)
-    categories = Category.query.all()
-    return render_template('index.html', products=products, categories=categories)
+    return render_template('index.html', products=products)
 
 @app.route('/about')
 def about():
