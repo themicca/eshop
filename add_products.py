@@ -15,49 +15,55 @@ def add_sample_data():
     db.session.add_all([electronics, clothing, books])
     db.session.commit()
     
-    # Add products
+    # Add products with proper image URLs
     products = [
         Product(
             name='Laptop',
             description='High-performance laptop with latest specs',
             price=999.99,
             stock=10,
-            category=electronics
+            category=electronics,
+            image_url='https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=500'
         ),
         Product(
             name='Smartphone',
             description='Latest model smartphone with great camera',
             price=699.99,
             stock=15,
-            category=electronics
+            category=electronics,
+            image_url='https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=500'
         ),
         Product(
             name='T-Shirt',
             description='Comfortable cotton t-shirt',
             price=19.99,
             stock=50,
-            category=clothing
+            category=clothing,
+            image_url='https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=500'
         ),
         Product(
             name='Jeans',
             description='Classic blue jeans',
             price=49.99,
             stock=30,
-            category=clothing
+            category=clothing,
+            image_url='https://images.unsplash.com/photo-1542272454315-4c01d7abdf4a?w=500'
         ),
         Product(
             name='Python Programming',
             description='Comprehensive guide to Python',
             price=29.99,
             stock=20,
-            category=books
+            category=books,
+            image_url='https://images.unsplash.com/photo-1526379095098-d400fd0bf935?w=500'
         ),
         Product(
             name='Web Development',
             description='Modern web development techniques',
             price=34.99,
             stock=25,
-            category=books
+            category=books,
+            image_url='https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=500'
         )
     ]
     
