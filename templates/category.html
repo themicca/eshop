@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('index') }}">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ category.name }}</li>
+        </ol>
+    </nav>
+
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h1>{{ category.name }}</h1>
+            <p class="lead text-muted">{{ category.description }}</p>
+        </div>
+        <div class="col-auto">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+                    Sort by
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="?sort=name">Name</a></li>
+                    <li><a class="dropdown-item" href="?sort=price_low">Price: Low to High</a></li>
+                    <li><a class="dropdown-item" href="?sort=price_high">Price: High to Low</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    {% if products %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 product-card shadow-sm">
+                <div class="position-relative">
+                    <img src="{{ product.image_url }}" class="card-img-top" alt="{{ product.name }}" style="height: 200px; object-fit: cover;">
+                    <div class="position-absolute top-0 end-0 p-2">
+                        <span class="badge bg-primary">${{ "%.2f"|format(product.price) }}</span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text text-muted">{{ product.description }}</p>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            Stock: {% if product.stock > 0 %}{{ product.stock }} available{% else %}Out of stock{% endif %}
+                        </small>
+                    </p>
+                    {% if current_user.is_authenticated and product.stock > 0 %}
+                    <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="POST" class="d-grid">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-cart-plus"></i> Add to Cart
+                        </button>
+                    </form>
+                    {% elif not current_user.is_authenticated %}
+                    <div class="d-grid">
+                        <a href="{{ url_for('login') }}" class="btn btn-outline-primary">
+                            Login to Add to Cart
+                        </a>
+                    </div>
+                    {% else %}
+                    <button class="btn btn-secondary d-block w-100" disabled>Out of Stock</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <p class="text-muted">No products found in this category.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %} 

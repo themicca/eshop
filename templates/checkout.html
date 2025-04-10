@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-4">
+    <h1 class="mb-4">Checkout</h1>
+    
+    <div class="row">
+        <!-- Checkout Form -->
+        <div class="col-md-8">
+            <form method="POST">
+                <!-- Shipping Information -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Shipping Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="full_name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="full_name" name="full_name" value="{{ current_user.full_name }}" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" value="{{ current_user.email }}" readonly>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" name="address" value="{{ current_user.address }}" required>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="city" value="{{ current_user.city }}" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="postal_code" class="form-label">Postal Code</label>
+                                <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{ current_user.postal_code }}" required>
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="country" class="form-label">Country</label>
+                                <select class="form-select" id="country" name="country" required>
+                                    <option value="">Choose...</option>
+                                    <option value="US" {% if current_user.country == 'US' %}selected{% endif %}>United States</option>
+                                    <option value="CA" {% if current_user.country == 'CA' %}selected{% endif %}>Canada</option>
+                                    <option value="GB" {% if current_user.country == 'GB' %}selected{% endif %}>United Kingdom</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" value="{{ current_user.phone }}" required>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Information -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Payment Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="card_name" class="form-label">Name on Card</label>
+                            <input type="text" class="form-control" id="card_name" name="card_name" required>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="card_number" class="form-label">Card Number</label>
+                            <input type="text" class="form-control" id="card_number" name="card_number" required pattern="[0-9]{16}" placeholder="1234 5678 9012 3456">
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="expiry" class="form-label">Expiry Date</label>
+                                <input type="text" class="form-control" id="expiry" name="expiry" required pattern="[0-9]{2}/[0-9]{2}" placeholder="MM/YY">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="cvv" class="form-label">CVV</label>
+                                <input type="text" class="form-control" id="cvv" name="cvv" required pattern="[0-9]{3,4}" placeholder="123">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shipping Method -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="card-title mb-0">Shipping Method</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="radio" name="shipping_method" id="standard" value="standard" checked>
+                            <label class="form-check-label" for="standard">
+                                Standard Shipping (3-5 business days) - {% if total > 50 %}Free{% else %}$9.99{% endif %}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="shipping_method" id="express" value="express">
+                            <label class="form-check-label" for="express">
+                                Express Shipping (1-2 business days) - $19.99
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">Place Order</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">Order Summary</h5>
+                </div>
+                <div class="card-body">
+                    {% for item in cart_items %}
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6 class="mb-0">{{ item.product.name }}</h6>
+                            <small class="text-muted">Qty: {{ item.quantity }}</small>
+                        </div>
+                        <span>${{ "%.2f"|format(item.product.price * item.quantity) }}</span>
+                    </div>
+                    {% endfor %}
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Subtotal</span>
+                        <span>${{ "%.2f"|format(total) }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Shipping</span>
+                        <span id="shipping-cost">{% if total > 50 %}Free{% else %}$9.99{% endif %}</span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <strong>Total</strong>
+                        <strong id="total-amount">${{ "%.2f"|format(total if total > 50 else total + 9.99) }}</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mt-3 shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title"><i class="bi bi-truck"></i> Shipping Information</h6>
+                    <p class="card-text small text-muted">
+                        Free shipping on orders over $50. Standard delivery takes 3-5 business days.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Update shipping cost and total when shipping method changes
+    document.querySelectorAll('input[name="shipping_method"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const subtotal = {{ total }};
+            let shippingCost = 0;
+            let total = subtotal;
+
+            if (this.value === 'express') {
+                shippingCost = 19.99;
+                total += shippingCost;
+            } else if (subtotal <= 50) {
+                shippingCost = 9.99;
+                total += shippingCost;
+            }
+
+            document.getElementById('shipping-cost').textContent = shippingCost === 0 ? 'Free' : '$' + shippingCost.toFixed(2);
+            document.getElementById('total-amount').textContent = '$' + total.toFixed(2);
+        });
+    });
+
+    // Format card number input
+    document.getElementById('card_number').addEventListener('input', function(e) {
+        let value = this.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+        let formattedValue = '';
+        for(let i = 0; i < value.length; i++) {
+            if(i > 0 && i % 4 === 0) {
+                formattedValue += ' ';
+            }
+            formattedValue += value[i];
+        }
+        this.value = formattedValue;
+    });
+
+    // Format expiry date input
+    document.getElementById('expiry').addEventListener('input', function(e) {
+        let value = this.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+        if(value.length > 2) {
+            value = value.substr(0, 2) + '/' + value.substr(2, 2);
+        }
+        this.value = value;
+    });
+</script>
+{% endblock %} 

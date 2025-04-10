@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="text-center mb-5">
+                <h1 class="display-4">About E-Shop</h1>
+                <p class="lead text-muted">Your trusted destination for premium electronics and gadgets</p>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Our Story</h2>
+                    <p>Founded in 2024, E-Shop has grown from a small online store to become one of the leading electronics retailers. We pride ourselves on offering the latest technology products at competitive prices, backed by exceptional customer service.</p>
+                    
+                    <p>Our mission is to make premium technology accessible to everyone while providing an unmatched shopping experience.</p>
+                </div>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">
+                                <i class="bi bi-star text-primary"></i>
+                                Quality Promise
+                            </h3>
+                            <p class="card-text">We carefully select and verify all our products to ensure you receive only genuine, high-quality items.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="h5 mb-3">
+                                <i class="bi bi-shield-check text-primary"></i>
+                                Secure Shopping
+                            </h3>
+                            <p class="card-text">Your security is our priority. We use industry-standard encryption to protect your personal and payment information.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h2 class="h4 mb-3">Why Choose Us?</h2>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="bi bi-check2-circle text-success me-2"></i>
+                            Wide selection of premium electronics
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-check2-circle text-success me-2"></i>
+                            Competitive prices and regular deals
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-check2-circle text-success me-2"></i>
+                            Fast and reliable shipping
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-check2-circle text-success me-2"></i>
+                            Expert customer support
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-check2-circle text-success me-2"></i>
+                            30-day hassle-free returns
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a href="{{ url_for('contact') }}" class="btn btn-primary btn-lg">
+                    <i class="bi bi-envelope me-2"></i>
+                    Contact Us
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
