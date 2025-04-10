@@ -6,14 +6,32 @@ import os
 from datetime import datetime, timezone
 
 app = Flask(__name__)
+
+# Configuration
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-here')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///eshop.db')
+
+# Database configuration
+if os.environ.get('VERCEL_ENV') == 'production':
+    # Use SQLite in memory for Vercel
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
+else:
+    # Use file-based SQLite for local development
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///eshop.db'
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
+
+# Initialize database and add sample data in production
+if os.environ.get('VERCEL_ENV') == 'production':
+    with app.app_context():
+        db.create_all()
+        # Import and run the add_products script
+        from add_products import add_sample_data
+        add_sample_data()
 
 # This is for Vercel
 app.debug = False

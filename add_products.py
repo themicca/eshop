@@ -1,7 +1,7 @@
 from app import app, db, Product, Category
 from datetime import datetime
 
-with app.app_context():
+def add_sample_data():
     # Clear existing data
     Product.query.delete()
     Category.query.delete()
@@ -208,5 +208,8 @@ with app.app_context():
         db.session.add(product)
 
     db.session.commit()
-    print("Sample categories and products have been added to the database!") 
-    print("Sample products have been added to the database!") 
+
+if __name__ == '__main__':
+    with app.app_context():
+        add_sample_data()
+        print("Sample categories and products have been added to the database!") 
